@@ -34,10 +34,10 @@ public class FileClient {
         if (!usageOk(argv))
           System.exit(1);
         //Socket s = null;
-        Transport clientT = null;
+        Transport transport = null;
         try {
             //s = new Socket(argv[0], PORT);
-        	clientT = new Transport(argv[0], PORT);
+        	transport = new Transport(argv[0], PORT);
         } catch (IOException e) {
             System.err.println("Unable to connect to server");
             e.printStackTrace();
@@ -57,8 +57,8 @@ public class FileClient {
             DataInputStream din = new DataInputStream(in);
             String serverStatus = din.readLine();*/	// -> transport.recevoir
         	
-        	clientT.envoyer(argv[1]);
-        	dataO = clientT.recevoir();
+        	transport.envoyer(argv[1]);
+        	dataO = transport.recevoir();
         	String serverStatus = dataO.toString();
         	System.out.println("Serveur status : "+"\n"+serverStatus+"\n");
             if (serverStatus.startsWith("Bad")) {
@@ -69,14 +69,14 @@ public class FileClient {
                 /*while((ch = in.read()) >= 0) {
                     System.out.write((char)ch);
                 }*/ // while
-            	System.out.println(clientT.recevoir()); 
+            	System.out.println(transport.recevoir()); 
             } // if
         } catch (IOException | ClassNotFoundException e) {
             exitCode = 1;
         } finally {
             try {
-            	if (clientT != null) {
-					clientT.fermer();
+            	if (transport != null) {
+					transport.fermer();
 				}
             } catch (IOException e) {
             } // try

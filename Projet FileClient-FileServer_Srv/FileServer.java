@@ -126,37 +126,29 @@ public class FileServer {
             activeConnectionCount++;
  			System.out.println ("Lancement du thread pour gérer"+
                                             "le protocole avec un client");
- 			Transport serveurT = null;
+ 			Transport transport = null;
  			Object dataO;
  			// read the file name sent by the client and open the file.
             try {
                 /*in = s.getInputStream();
                 out = new PrintStream(s.getOutputStream());*/
-            	serveurT = new utilitaires.Transport(s);
+            	transport = new utilitaires.Transport(s);
                 /*fileName = new DataInputStream(in).readLine();
                 f = new FileInputStream(fileName);*/
-            	dataO = serveurT.recevoir();
+            	dataO = transport.recevoir();
             	fileName = dataO.toString();
             	f = new FileInputStream(fileName);
             } catch (IOException | ClassNotFoundException e) {
                 activeConnectionCount--;
-                /*if (out != null)
-                  out.print("Bad:"+fileName+"\n");
-                out.close();*/
-                if (serveurT != null) {
+                if (transport != null) {
                 	try {
-						serveurT.envoyer("Bad:"+fileName);
-						serveurT.fermer();
+						transport.envoyer("Bad:"+fileName);
+						transport.fermer();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
                 	
 				}
-                /*try {
-                    s.close();
-                } catch (IOException ie) {
-                }*/
                 return;
             } // try
 
@@ -166,40 +158,29 @@ public class FileServer {
 			String line;
 			
             try {
-				serveurT.envoyer("Good:\n");
-				br = new BufferedReader(new FileReader(fileName));
-				
-				
+				transport.envoyer("Good:\n");
+				br = new BufferedReader(new FileReader(fileName));				
 				
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
             byte[] buffer = new byte[4096];
             String t="";
             try {
                 int len;
-                /*while (!shutDownFlag && (len = f.read(buffer)) > 0) {
-                    out.write(buffer, 0, len);			// print, write -> transport.envoyer
-                }*/ // while
-                /*while (!shutDownFlag && (serveurT.recevoir() != null)) {
-                    serveurT.envoyer(buffer);
-                }*/
                 while (!shutDownFlag && (line = br.readLine()) != null) {
                 	t+=line;	//byte toString	
                 	//out.write(buffer, 0, len);			// print, write -> transport.envoyer
-                	//serveurT.envoyer(buffer);
+                	//transport.envoyer(buffer);
                 } // while
-                serveurT.envoyer(t);
+                transport.envoyer(t);
             } catch (IOException e) {
-            /*} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			*/} finally {
+            
+            } finally {
                 try {
                     activeConnectionCount--;                    
                     f.close();
-                    serveurT.fermer();
+                    transport.fermer();
                     //out.close();
                     //s.close();
                 } catch (IOException e) {
