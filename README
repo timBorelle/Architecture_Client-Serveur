@@ -1,0 +1,4 @@
+**Architecture Client/Serveur**
+
+* sérialisation d'objets
+* Couche transport distincte

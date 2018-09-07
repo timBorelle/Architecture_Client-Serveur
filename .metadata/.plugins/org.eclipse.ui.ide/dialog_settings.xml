@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="C:\Users\tim-b\eclipse-workspace\M1\INF2_Framework_comp_webS\architectureClient_Server\Projet FileClient-FileServer_Srv"/>
+		<item value="C:\Users\tim-b\eclipse-workspace\M1\INF2_Framework_comp_webS\architectureClient_Server\Projet FileClient-FileServer_Clt"/>
+	</list>
+	<section name="ExternalProjectImportWizard">
+	</section>
+</section>
