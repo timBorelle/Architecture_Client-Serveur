@@ -29,8 +29,7 @@ public class FileClient {
         
         String[] argv = new String[2]; 
         argv[0] = "localhost";
-        argv[1] = "C:\\Users\\tim-b\\eclipse-workspace\\M1\\INF2_Framework_comp_webS\\"
-    			+ "architectureClient_Server\\Projet FileClient-FileServer_Clt\\document1.txt";
+        argv[1] = "D:\\Master\\INF2\\doc.txt";
         if (!usageOk(argv))
           System.exit(1);
         //Socket s = null;
