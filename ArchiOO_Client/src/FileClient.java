@@ -16,7 +16,7 @@ public class FileClient {
         IProtocoleClient protocoleClient;
         Scanner sc = null;
         try {
-            protocoleClient = new ProtocoleClient(ADRESSE, PORT);
+        	protocoleClient = new ProtocoleClient(new Transport(ADRESSE, PORT));
             sc = new Scanner(System.in);
             System.out.println("Saisir le nom du ficher (exemple = C:\\document1.txt) :");
             String filename = sc.nextLine();
