@@ -12,11 +12,17 @@ public class ProtocoleClient implements IProtocoleClient {
     public void envoyerDemande(String fileName) throws Exception {
         this.pathFile = fileName;
         this.transport.envoyer(this.pathFile);
-        if ((this.result = (String) this.transport.recevoir()).getClass().equals(Exception.class))
-            throw new Exception("Problème de lecture/ouverture côté serveur");
+        this.result = (String) this.transport.recevoir();
+        /*if ((this.result = (String) this.transport.recevoir()).getClass().equals(Exception.class))
+            throw new Exception("Problème de lecture/ouverture côté serveur");*/
     }
 
-    public String recevoirResultat() {
-        return this.result;
+    public String recevoirResultat() throws Exception {
+    	try {
+    		return this.result;
+    	}catch (Exception e) {
+    		throw new Exception("Problème de lecture/ouverture côté serveur");
+		}
+        
     }
 }

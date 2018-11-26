@@ -2,9 +2,16 @@ package Utilitaires;
 import java.net.Socket;
 
 public class ProtocoleServer implements IProtocoleServer {
-    private Transport transport;
+    //private Transport transport;
+    private InterfaceTransport transport;
 
-
+    /*
+     * Constructeur avec injection de dépendance
+     */
+    public ProtocoleServer(InterfaceTransport it) throws Exception {
+        this.transport = it;
+    }
+    
     public ProtocoleServer(Socket s) throws Exception {
         this.transport = new Transport(s);
     }

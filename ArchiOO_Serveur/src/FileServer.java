@@ -6,7 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import Utilitaires.IProtocoleServer;
+import Utilitaires.InterfaceTransport;
 import Utilitaires.ProtocoleServer;
+import Utilitaires.Transport;
 
 public class FileServer {
     // The default port number that this server will listen on
@@ -92,7 +94,13 @@ public class FileServer {
                 } // if
                 // Create worker object to process connection.
                 System.out.println("Acceptation d'un client ");
-                new FileServerWorker(socket);
+                //new FileServerWorker(socket);
+                try {
+					new FileServerWorker(new ProtocoleServer(new Transport(socket)));
+				} catch (Exception eFSW) {
+					//eFSW.printStackTrace();
+					System.err.println("ERR FileServerWorker !");
+				}
             } // while
         } catch (IOException e) {
             // if there is an I/O error just return
@@ -109,14 +117,22 @@ public class FileServer {
     private class FileServerWorker implements Runnable {
         private IProtocoleServer protocoleServer;
 
-        FileServerWorker(Socket s) {
+        /*
+         * Constructeur avec injection de d�pendance
+         */
+        FileServerWorker(IProtocoleServer ips){
+        	protocoleServer = ips;
+        	new Thread(this).start();
+        }
+        
+        /*FileServerWorker(Socket s) {
             try {
                 protocoleServer = new ProtocoleServer(s);
             } catch (Exception e) {
                 System.out.println("Erreur rencontré pendant la création du protocole serveur");
             }
             new Thread(this).start();
-        }
+        }*/
 
         public void run() {
             String result;
@@ -126,6 +142,7 @@ public class FileServer {
                 protocoleServer.envoyerResultat(result);
             } catch (Exception e) {
                 activeConnectionCount--;
+                //throw new Exception("message d'exception");
             }
         }
 
