@@ -9,7 +9,13 @@ public class Transport implements InterfaceTransport {
     private ObjectOutputStream out;
     private ObjectInputStream din;
 
-
+    /*
+     * Constructeur avec dépendance
+     */
+    /*public Transport() {
+    	
+	}*/
+    
     public Transport(String adresse, int port) throws Exception {
         s = new Socket(adresse, port);
         out = new ObjectOutputStream(s.getOutputStream());

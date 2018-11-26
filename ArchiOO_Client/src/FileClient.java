@@ -22,9 +22,10 @@ public class FileClient {
         int exitCode = 0;
         String contenu;
         IProtocoleClient protocoleClient;
+        Scanner sc = null;
         try {
             protocoleClient = new ProtocoleClient(ADRESSE, PORT);
-            Scanner sc = new Scanner(System.in);
+            sc = new Scanner(System.in);
             System.out.println("Saisir le nom du ficher (exemple = C:\\document1.txt) :");
             String filename = sc.nextLine();
             String file = (new File(filename)).getAbsolutePath();
@@ -35,6 +36,7 @@ public class FileClient {
             System.out.println(e);
             exitCode = 1;
         }
+        sc.close();
         System.exit(exitCode);
     }
 }
