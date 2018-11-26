@@ -12,5 +12,5 @@ public interface IProtocoleClient {
      * Permet de récupérer le message du serveur
      * @return
      */
-    String recevoirResultat();
+    String recevoirResultat() throws Exception;
 }
