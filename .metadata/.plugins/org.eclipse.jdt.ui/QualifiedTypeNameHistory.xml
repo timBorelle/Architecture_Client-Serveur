@@ -6,7 +6,12 @@
 <fullyQualifiedTypeName name="java.lang.Object"/>
 <fullyQualifiedTypeName name="java.io.ObjectInputStream"/>
 <fullyQualifiedTypeName name="java.io.FileInputStream"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="java.io.FileReader"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="Utilitaires.ProtocoleServer"/>
+<fullyQualifiedTypeName name="Utilitaires.Transport"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="Utilitaires.IProtocoleServer"/>
+<fullyQualifiedTypeName name="Utilitaires.InterfaceTransport"/>
 </qualifiedTypeNameHistroy>
