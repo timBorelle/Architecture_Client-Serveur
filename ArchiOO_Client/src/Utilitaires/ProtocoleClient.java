@@ -8,13 +8,11 @@ public class ProtocoleClient implements IProtocoleClient {
         this.transport = transport;
     }
 
-    public void envoyerDemande(String fileName) throws Exception {
+    public void envoyerDemande(String fileName) throws IOException {
         this.transport.envoyer(fileName);
     }
 
-    public String recevoirResultat() throws Exception{
-        if (((String) this.transport.recevoir()).getClass().equals(Exception.class))
-            throw new Exception("Problème de lecture/ouverture côté serveur");
-        else return (String) this.transport.recevoir();
+    public String recevoirResultat() throws IOException, ClassNotFoundException{
+        return (String) this.transport.recevoir();
     }
 }
