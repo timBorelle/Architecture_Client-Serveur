@@ -1,13 +1,12 @@
 package Utilitaires;
 
-
 public class ProtocoleClient implements IProtocoleClient {
     private String result;
     private String pathFile;
-    InterfaceTransport transport;
+    private Transport transport;
 
-    public ProtocoleClient(InterfaceTransport transport){
-        this.transport = transport;
+    public ProtocoleClient(String adresse, int port) throws Exception {
+        this.transport = new Transport(adresse, port);
     }
 
     public void envoyerDemande(String fileName) throws Exception {
@@ -19,10 +18,6 @@ public class ProtocoleClient implements IProtocoleClient {
     }
 
     public String recevoirResultat() throws Exception {
-    	try {
-    		return this.result;
-    	}catch (Exception e) {
-    		throw new Exception("Problème de lecture/ouverture côté serveur");
-		}
+    	return this.result;  
     }
 }

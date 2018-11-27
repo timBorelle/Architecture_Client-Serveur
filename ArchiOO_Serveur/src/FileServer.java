@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -116,6 +117,7 @@ public class FileServer {
 
     private class FileServerWorker implements Runnable {
         private IProtocoleServer protocoleServer;
+        private BufferedReader reader;
 
         /*
          * Constructeur avec injection de d�pendance
@@ -124,15 +126,6 @@ public class FileServer {
         	protocoleServer = ips;
         	new Thread(this).start();
         }
-        
-        /*FileServerWorker(Socket s) {
-            try {
-                protocoleServer = new ProtocoleServer(s);
-            } catch (Exception e) {
-                System.out.println("Erreur rencontré pendant la création du protocole serveur");
-            }
-            new Thread(this).start();
-        }*/
 
         public void run() {
             String result;
@@ -140,9 +133,13 @@ public class FileServer {
                 activeConnectionCount++;
                 result = readFile(protocoleServer.recupererDemande());
                 protocoleServer.envoyerResultat(result);
+                reader.close();
+            } catch (FileNotFoundException filenotfound) {
+            	filenotfound.printStackTrace();
+            } catch(IOException ioe) {
+            	ioe.printStackTrace();
             } catch (Exception e) {
                 activeConnectionCount--;
-                //throw new Exception("message d'exception");
             }
         }
 
@@ -153,24 +150,15 @@ public class FileServer {
          * @param path
          * @return
          */
-        private String readFile(String path) throws Exception {
+        private String readFile(String path) throws FileNotFoundException, IOException, Exception {
             StringBuilder sb = new StringBuilder();
             FileInputStream file;
-            try {
-                file = new FileInputStream(path);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(file));
-                String line;
-                try {
-                    while ((line = reader.readLine()) != null)
-                        sb.append(line).append("\n");
-                    file.close();
-                } catch (Exception e) {
-                    protocoleServer.envoyerErreur(e);
-                    reader.close();
-                }
-            } catch (Exception ex) {
-                protocoleServer.envoyerErreur(ex);
-            }
+            file = new FileInputStream(path);
+            reader = new BufferedReader(new InputStreamReader(file));
+            String line;
+            while ((line = reader.readLine()) != null)
+            	sb.append(line).append("\n");
+            file.close();     
             return sb.toString();
         }
     }
