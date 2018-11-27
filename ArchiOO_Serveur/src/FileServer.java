@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,7 +7,8 @@ import Utilitaires.InterfaceTransport;
 import Utilitaires.ProtocoleServer;
 import Utilitaires.Transport;
 
-public class FileServer {
+public class FileServer
+{
     // The default port number that this server will listen on
     private final static int DEFAULT_PORT_NUMBER = 1234;
 
@@ -61,7 +59,8 @@ public class FileServer {
     public void runServer() {
         ServerSocket s;
 
-        try {
+        try
+        {
             // Create the ServerSocket.
             System.out.println("Lancement du serveur");
             s = new ServerSocket(portNumber, MAX_BACKLOG);
@@ -69,24 +68,30 @@ public class FileServer {
             // Set timeout for accepting connections so server won't
             // wait forever until noticing a request to shut down.
             s.setSoTimeout(TIMEOUT);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             System.err.println("Unable to create socket");
             e.printStackTrace();
             return;
         }
         // loop to keep accepting new connections and talking to clients
-        try {
+        try
+        {
             Socket socket;
             serverLoop:
-            while (true) {                  // Keep accepting connections.
-                try {
+            while (true)
+            {                  // Keep accepting connections.
+                try
+                {
                     socket = s.accept(); // Accept a connection.
-                } catch (java.io.InterruptedIOException e) {
+                } catch (java.io.InterruptedIOException e)
+                {
                     socket = null;
                     if (!shutDownFlag)
                         continue serverLoop;
                 } // try
-                if (shutDownFlag) {
+                if (shutDownFlag)
+                {
                     if (socket != null)
                         socket.close();
                     s.close();
@@ -95,14 +100,17 @@ public class FileServer {
                 // Create worker object to process connection.
                 System.out.println("Acceptation d'un client ");
                 //new FileServerWorker(socket);
-                try {
-					new FileServerWorker(new ProtocoleServer(new Transport(socket)));
-				} catch (Exception eFSW) {
-					//eFSW.printStackTrace();
-					System.err.println("ERR FileServerWorker !");
-				}
+                try
+                {
+                    new FileServerWorker(new ProtocoleServer(new Transport(socket)));
+                } catch (Exception eFSW)
+                {
+                    //eFSW.printStackTrace();
+                    System.err.println("ERR FileServerWorker !");
+                }
             } // while
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             // if there is an I/O error just return
         }
     }
@@ -114,41 +122,37 @@ public class FileServer {
         shutDownFlag = true;
     }
 
-    private class FileServerWorker implements Runnable {
+    private class FileServerWorker implements Runnable
+    {
         private IProtocoleServer protocoleServer;
+        private BufferedReader reader;
 
         /*
          * Constructeur avec injection de d�pendance
          */
-        FileServerWorker(IProtocoleServer ips){
-        	protocoleServer = ips;
-        	new Thread(this).start();
-        }
-        
-        /*FileServerWorker(Socket s) {
-            try {
-                protocoleServer = new ProtocoleServer(s);
-            } catch (Exception e) {
-                System.out.println("Erreur rencontré pendant la création du protocole serveur");
-            }
+        FileServerWorker(IProtocoleServer ips) {
+            protocoleServer = ips;
             new Thread(this).start();
-        }*/
+        }
 
         public void run() {
             String result;
-            try {
+            try
+            {
                 activeConnectionCount++;
                 result = readFile(protocoleServer.recupererDemande());
                 protocoleServer.envoyerResultat(result);
-            } catch (Exception e) {
+                reader.close();
+            } catch (FileNotFoundException filenotfound)
+            {
+                filenotfound.printStackTrace();
+            } catch (IOException ioe)
+            {
+                ioe.printStackTrace();
+            } catch (Exception e)
+            {
                 activeConnectionCount--;
-                //throw new Exception("message d'exception");
-            } catch (FileNotFoundException filenotfound) {
-            	filenotfound.printStackTrace();
-            	protocoleServer.envoyerErreur(e);
-                reader.close(filenotfound);
             }
-            
         }
 
 
@@ -156,26 +160,20 @@ public class FileServer {
          * Permet de lire et retourner le contenu d'un fichier
          *
          * @param path
-         * @return	
+         * @return
          */
-        private String readFile(String path) throws Exception {
+        private String readFile(String path) throws FileNotFoundException, IOException, {
             StringBuilder sb = new StringBuilder();
             FileInputStream file;
-           /* try {*/
-                file = new FileInputStream(path);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(file));
-                String line;
-             /*   try {*/
-                    while ((line = reader.readLine()) != null)
-                        sb.append(line).append("\n");
-                    file.close();
-             /*   } catch (Exception e) {
-                    protocoleServer.envoyerErreur(e);
-                    reader.close();
-               /* }*/
-           /* } catch (Exception ex) { 
-                protocoleServer.envoyerErreur(ex);
-           /* } */
+
+            file = new FileInputStream(path);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                sb.append(line).append("\n");
+            file.close();
+
             return sb.toString();
         }
     }
