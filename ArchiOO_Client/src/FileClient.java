@@ -24,7 +24,16 @@ public class FileClient {
             protocoleClient.envoyerDemande(file);
             contenu = protocoleClient.recevoirResultat();
             System.out.println(contenu);
-        } catch (Exception e) {
+        } 
+        catch (ClassNotFoundException e) {
+        	System.out.println(e);
+        	exitCode = 10;
+        }
+        catch (IOException e) {
+        	System.out.println(e);
+        	exitCode = 5;
+        }
+        catch (Exception e) {
             System.out.println(e);
             exitCode = 1;
         }
