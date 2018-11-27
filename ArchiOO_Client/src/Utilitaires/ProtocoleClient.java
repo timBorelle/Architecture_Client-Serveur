@@ -1,5 +1,6 @@
 package Utilitaires;
 
+import java.io.IOException;
 
 public class ProtocoleClient implements IProtocoleClient {
     InterfaceTransport transport;
