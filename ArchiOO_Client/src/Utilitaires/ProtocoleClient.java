@@ -18,11 +18,6 @@ public class ProtocoleClient implements IProtocoleClient {
     }
 
     public String recevoirResultat() throws Exception {
-    	try {
-    		return this.result;
-    	}catch (Exception e) {
-    		throw new Exception("Problème de lecture/ouverture côté serveur");
-		}
-        
+    	return this.result;  
     }
 }
