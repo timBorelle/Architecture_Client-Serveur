@@ -136,13 +136,10 @@ public class FileServer {
                 reader.close();
             } catch (FileNotFoundException filenotfound) {
             	filenotfound.printStackTrace();
-            	//protocoleServer.envoyerErreur(filenotfound);
             } catch(IOException ioe) {
             	ioe.printStackTrace();
-            	//protocoleServer.envoyerErreur(ioe);
             } catch (Exception e) {
                 activeConnectionCount--;
-                //protocoleServer.envoyerErreur(e);
             }
         }
 
